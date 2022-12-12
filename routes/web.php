@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', ['App\Http\Controllers\WelcomeController', 'NotAuthenticatedStartPage']);
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/welcome', ['App\Http\Controllers\WelcomeController', 'AuthenticatedStartPage'])->name('auth.welcome');
+    Route::get('chats/{chat}/messages', ['App\Http\Controllers\Api\GetChatMessagesController', 'handle']);
+    Route::get('/me', function (Request $request) {
+        return $request->user();
+    });
 });
+
+require __DIR__ . '/auth.php';
