@@ -22,7 +22,7 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'text' => $this->resource->text,
-            'date' => $this->resource->created_at->format('h:i'),
+            'date' => $this->resource->created_at->format('H:i'),
             'created_at' => $this->resource->created_at->format('m/d/Y'),
             'is_edited' => $this->resource->isEdited(),
             'is_mine' => $this->resource->user->is(Auth::user()),
