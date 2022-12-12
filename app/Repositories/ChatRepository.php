@@ -14,7 +14,6 @@ class ChatRepository
             ->with('attachment', 'user.avatar', 'statuses')
             ->take($limit)
             ->offset($offset)
-            ->groupBy('messages.id', 'created_at')
             ->get();
     }
 
