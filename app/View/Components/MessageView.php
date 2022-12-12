@@ -35,7 +35,7 @@ class MessageView extends Component
         ];
 
         if ($this->message->isEdited()) {
-            $data = array_merge($data, ['isEdited' => true, 'date' => $this->message->updated_at->format('h:i')]);
+            $data = array_merge($data, ['isEdited' => true]);
         }
 
         return view('components.message-view', $data);
