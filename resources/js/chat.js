@@ -24,19 +24,16 @@ export class Chat {
         this.currentUser = currentUser;
     }
 
-    open()
-    {
+    open() {
         this.panel.container.removeAttribute('style');
         this.panel.contentContainer.scrollTop = this.panel.contentContainer.scrollHeight;
     }
 
-    close()
-    {
+    close() {
         this.panel.container.style.display = 'none';
     }
 
-    getId()
-    {
+    getId() {
         return this.panel.container.dataset.chatId;
     }
 
@@ -73,13 +70,16 @@ export class Chat {
                 let currentBlock = lastViewedUser;
                 let tempBlock = null;
 
+                let lastMessage = this.panel.container.querySelector('.message-card')
+
                 messages.forEach(message => {
+                    // debugger;
                     let viewedDay = this.findViewedDay(message.created_at);
 
                     if (viewedDay) {
                         lastViewedDay = viewedDay;
                         currentBlock = viewedDay.parentElement;
-                        lastViewedUser = viewedDay.nextElementSibling.classList.contains('.user-cards-container')
+                        lastViewedUser = viewedDay.parentElement.nextElementSibling.classList.contains('.user-cards-container')
                             ? viewedDay.nextElementSibling
                             : lastViewedUser;
                     }
@@ -90,7 +90,7 @@ export class Chat {
                         currentBlock = lastViewedDay;
                         lastViewedDay = lastViewedDay.firstElementChild;
                     }
-                    debugger;
+
                     if (message.user.id != lastViewedUser.dataset.userId) {
                         lastViewedUser = createUserContainer(message.user);
                         currentBlock.after(lastViewedUser);
@@ -98,12 +98,17 @@ export class Chat {
                     }
 
                     tempBlock = createMessageContainer(message);
+                    tempBlock.dataset.uid = message.user.id
+
                     currentBlock.after(tempBlock);
                     currentBlock = tempBlock;
                 })
 
                 this.messagesOffset += this.MESSAGES_LIMIT;
                 this.isMessagesFetching = false;
+                scrollToMessage(lastMessage);
+
+                removeMessageAvatar(lastMessage)
             })
     }
 
@@ -145,8 +150,7 @@ export class Input {
     }
 
     handleEnterKey(event) {
-        if (event.keyCode !== this.ENTER_KEY_CODE && event.shiftKey)
-        {
+        if (event.keyCode !== this.ENTER_KEY_CODE && event.shiftKey) {
             return;
         }
 
@@ -155,8 +159,7 @@ export class Input {
     }
 }
 
-function createUserContainer(user)
-{
+function createUserContainer(user) {
     let div = document.createElement('div')
     div.classList.value = 'mt-2 user-cards-container';
     div.dataset.userId = user.id;
@@ -176,8 +179,7 @@ function createAvatarContainer(link) {
     return container;
 }
 
-function createMessageContainer(message)
-{
+function createMessageContainer(message) {
     let container = document.createElement('div');
     container.classList.value = 'message-card w-[80%] mt-2 relative';
     let messageHeader = document.createElement('div');
@@ -203,7 +205,8 @@ function createMessageContainer(message)
     messageContent.classList.value = 'text-[15px]';
     messageContent.innerHTML = message.text;
     let metaMessageContent = document.createElement('span');
-    metaMessageContent.append('absolute bottom-1 right-1 text-slate-500 text-[12px]');
+    metaMessageContent.append(message.date);
+    metaMessageContent.classList.add('absolute', 'bottom-1', 'right-1', 'text-slate-500', 'text-[12px]');
 
     if (message.is_edited) {
         metaMessageContent.innerHTML = 'изменено <i class="far fa-edit"></i>' + message.date;
@@ -220,10 +223,9 @@ function createMessageContainer(message)
     return container;
 }
 
-function createDayContainer(date)
-{
+function createDayContainer(date) {
     let container = document.createElement('div');
-    container.classList.value = 'flex justify-center sticky top-0 mt-4 z-10';
+    container.classList.value = 'day-wrapper flex justify-center sticky top-0 mt-4 z-10';
     let day = document.createElement('div');
     day.classList.value = 'day-container text-center w-[120px] h-[40px] bg-gray-200 text-gray-800 font-bold ' +
         'text-sm font-medium p-2.5 rounded-full dark:bg-gray-700 dark:text-gray-300';
@@ -253,7 +255,45 @@ function createDayContainer(date)
     return container;
 }
 
-function sendMessage(input)
-{
+function sendMessage(input) {
 
+}
+
+function scrollToMessage(message) {
+    message.scrollIntoView(true);
+    message.parentElement.scrollBy(0, -100)
+}
+
+function removeMessageAvatar(message) {
+    let previousMessage = message.previousElementSibling;
+    let isPreviousMessageContainer = previousMessage.classList.contains('message-card');
+    let isNextDay = false
+    console.log(isPreviousMessageContainer)
+
+    while (!isPreviousMessageContainer) {
+        // debugger
+
+        if (previousMessage.classList.contains('user-cards-container')) {
+            previousMessage.remove()
+            previousMessage = message.previousElementSibling
+            isPreviousMessageContainer = previousMessage.classList.contains('message-card');
+            continue
+        }
+
+        if (previousMessage.classList.contains('day-wrapper')) {
+            isNextDay = true
+        }
+
+        previousMessage = previousMessage.previousElementSibling
+
+        isPreviousMessageContainer = previousMessage.classList.contains('message-card');
+    }
+    console.log('mes', message)
+    console.log('prev', previousMessage)
+    console.log('bool', isNextDay)
+
+    if (message.dataset.uid === previousMessage.dataset.uid && !isNextDay) {
+        const avatar = message.querySelector('.avatar')
+        avatar.remove()
+    }
 }
