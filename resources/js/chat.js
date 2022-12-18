@@ -129,14 +129,17 @@ export class Panel {
 
 
 export class Input {
-    ENTER_KEY_CODE = 9;
+    ENTER_KEY_CODE = 13;
+    minHeight = 40;
+    maxHeight = 160;
     htmlElement;
 
     constructor(htmlElement) {
         this.htmlElement = htmlElement;
+        htmlElement.addEventListener('keyup', event => this.onKeyUp(event))
     }
 
-    resizeArea(minHeight, maxHeight) {
+    resizeArea() {
         let offsetHeight = 10;
 
         String(this.htmlElement.value).split("\n").forEach(function (s) {
@@ -144,18 +147,22 @@ export class Input {
         });
 
         let height = offsetHeight;
-        height = Math.max(minHeight, height);
-        height = Math.min(maxHeight, height);
+        height = Math.max(this.minHeight, height);
+        height = Math.min(this.maxHeight, height);
         this.htmlElement.style.height = height + 'px';
     }
 
     handleEnterKey(event) {
-        if (event.keyCode !== this.ENTER_KEY_CODE && event.shiftKey) {
-            return;
+        if (event.keyCode === this.ENTER_KEY_CODE && !event.shiftKey) {
+            this.htmlElement.innerHTML = '';
+            this.htmlElement.value = '';
+            sendMessage(this);
         }
+    }
 
-        event.preventDefault();
-        sendMessage(this);
+    onKeyUp(event) {
+        this.handleEnterKey(event);
+        this.resizeArea();
     }
 }
 

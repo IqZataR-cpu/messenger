@@ -73,8 +73,7 @@
                     <textarea
                         id="message"
                         rows="1"
-                        onkeyup="resizeArea('message', 40, 160);"
-                        class="scrollbar-thin text-[16px] leading-[30px] scrollbar-thumb-slate-300 scrollbar-track-white-100 border-none h-10 text-slate-600 placeholder:text-slate-500 block bg-white w-full border rounded-md py-1 pl-5 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
+                        class="message-input scrollbar-thin text-[16px] leading-[30px] scrollbar-thumb-slate-300 scrollbar-track-white-100 border-none h-10 text-slate-600 placeholder:text-slate-500 block bg-white w-full border rounded-md py-1 pl-5 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
                         placeholder="Введите сообщение" type="text" name="message"
                         style="resize: none;"
                     ></textarea>

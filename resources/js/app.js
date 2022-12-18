@@ -1,5 +1,5 @@
 import './bootstrap';
-import {Chat, Panel} from './chat.js';
+import {Chat, Input, Panel} from './chat.js';
 
 import Alpine from 'alpinejs';
 
@@ -8,6 +8,12 @@ window.Alpine = Alpine;
 Alpine.start();
 
 let currentUser;
+let inputs = document.querySelectorAll('.message-input');
+
+inputs.forEach(function (input) {
+    input = new Input(input);
+})
+
 
 await fetch('/me')
     .then(response => response.json())
@@ -46,3 +52,4 @@ chats.forEach(chat => {
         previousY = currentY;
     });
 })
+
