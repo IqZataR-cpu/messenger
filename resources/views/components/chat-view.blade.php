@@ -82,4 +82,7 @@
             <i class="fa-solid fa-microphone"></i>
         </div>
     </div>
+    <div class="attachments">
+
+    </div>
 </div>
