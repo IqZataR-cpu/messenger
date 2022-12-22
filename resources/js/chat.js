@@ -46,6 +46,10 @@ export class Chat {
         return this.panel.contentContainer.querySelector('.day-container');
     }
 
+    getAttachments() {
+        return this.attacments
+    }
+
     findViewedDay(rawDay) {
         return this.panel.contentContainer.querySelector(`.day-container[data-raw-day="${rawDay}"]`);
     }
@@ -70,12 +74,13 @@ export class Chat {
 
     saveImage(file, container) {
         const reader = new FileReader();
-        console.log(file)
+
         reader.addEventListener('load', (event) => {
             const uploaded_image = event.target.result;
             this.attacments.push(file);
             container.style.backgroundImage = `url(${uploaded_image})`;
         });
+
         reader.readAsDataURL(file);
     }
 
@@ -145,28 +150,7 @@ export class Chat {
         return this.panel.contentContainer.querySelector('.user-cards-container');
     }
 
-    async sendMessage(message) {
-        const data = {
-            messsage: message.value,
-            attachments: this.attachments,
-        };
-        const url = ''
-        console.log(data)
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }
+
 }
 
 export class Panel {
@@ -206,7 +190,7 @@ export class Input {
 
     handleEnterKey(event) {
         if (event.keyCode === this.ENTER_KEY_CODE && !event.shiftKey) {
-            Chat.sendMessage(this.htmlElement); //Я хз, где вызвать
+            sendMessage(this.htmlElement); 
             this.clearInput(this.htmlElement)
         }
     }
@@ -354,3 +338,26 @@ function removeMessageAvatar(message) {
     }
 }
 
+async function sendMessage(message) {
+    console.log(Chat)
+    const data = {
+        messsage: message.value,
+        attachments: Chat.getAttachments(),
+    };
+    const url = ''
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
