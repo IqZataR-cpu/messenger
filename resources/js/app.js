@@ -51,5 +51,27 @@ chats.forEach(chat => {
         }
         previousY = currentY;
     });
+
+    chat.panel.container.addEventListener('dragover', (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+
+    });
+
+    chat.panel.container.addEventListener('drop', (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const fileList = event.dataTransfer.files;
+        const attacments = chat.panel.container.querySelector(".attachments") 
+        const attachmentContainer = chat.createAttachmentContainer(attacments)
+
+        attacments.append(attachmentContainer)
+
+        attachmentContainer.querySelector('.attachment-name').textContent = fileList[0].name;
+        
+        chat.saveImage(fileList[0], attachmentContainer.querySelector('.attachment-photo'));
+    });  
 })
 

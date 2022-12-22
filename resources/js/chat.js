@@ -17,6 +17,7 @@ export class Chat {
     MESSAGES_LIMIT = 10;
     isMessagesFetching;
     currentUser;
+    attacments = [];
 
     constructor(chatTab, chatPanel, currentUser) {
         this.panel = chatPanel;
@@ -49,6 +50,35 @@ export class Chat {
         return this.panel.contentContainer.querySelector(`.day-container[data-raw-day="${rawDay}"]`);
     }
 
+    createAttachmentContainer(parent) {
+        const attachmentContainer = document.createElement("div");
+        const attachmentPhoto = document.createElement("div");
+        const attachmentName = document.createElement("p");
+
+        attachmentContainer.classList.add('attachment-container')
+        attachmentPhoto.classList.add('attachment-photo')
+        attachmentName.classList.add('attachment-name')
+
+        attachmentPhoto.style.width = "100px"
+        attachmentPhoto.style.height = "100px"
+
+        attachmentContainer.append(attachmentPhoto)
+        attachmentContainer.append(attachmentName)
+
+        return (attachmentContainer)
+    }
+
+    saveImage(file, container) {
+        const reader = new FileReader();
+        console.log(file)
+        reader.addEventListener('load', (event) => {
+            const uploaded_image = event.target.result;
+            this.attacments.push(file);
+            container.style.backgroundImage = `url(${uploaded_image})`;
+        });
+        reader.readAsDataURL(file);
+    }
+
     async loadMessages() {
         if (this.isMessagesFetching) {
             return;
@@ -73,7 +103,6 @@ export class Chat {
                 let lastMessage = this.panel.container.querySelector('.message-card')
 
                 messages.forEach(message => {
-                    // debugger;
                     let viewedDay = this.findViewedDay(message.created_at);
 
                     if (viewedDay) {
@@ -115,6 +144,29 @@ export class Chat {
     getLastViewedUser() {
         return this.panel.contentContainer.querySelector('.user-cards-container');
     }
+
+    async sendMessage(message) {
+        const data = {
+            messsage: message.value,
+            attachments: this.attachments,
+        };
+        const url = ''
+        console.log(data)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 export class Panel {
@@ -154,15 +206,19 @@ export class Input {
 
     handleEnterKey(event) {
         if (event.keyCode === this.ENTER_KEY_CODE && !event.shiftKey) {
-            this.htmlElement.innerHTML = '';
-            this.htmlElement.value = '';
-            sendMessage(this);
+            Chat.sendMessage(this.htmlElement); //Я хз, где вызвать
+            this.clearInput(this.htmlElement)
         }
     }
 
     onKeyUp(event) {
         this.handleEnterKey(event);
         this.resizeArea();
+    }
+
+    clearInput(input) {
+        input.innerHTML = '';
+        input.value = '';
     }
 }
 
@@ -262,10 +318,6 @@ function createDayContainer(date) {
     return container;
 }
 
-function sendMessage(input) {
-
-}
-
 function scrollToMessage(message) {
     message.scrollIntoView(true);
     message.parentElement.scrollBy(0, -100)
@@ -278,8 +330,6 @@ function removeMessageAvatar(message) {
     console.log(isPreviousMessageContainer)
 
     while (!isPreviousMessageContainer) {
-        // debugger
-
         if (previousMessage.classList.contains('user-cards-container')) {
             previousMessage.remove()
             previousMessage = message.previousElementSibling
@@ -295,12 +345,12 @@ function removeMessageAvatar(message) {
 
         isPreviousMessageContainer = previousMessage.classList.contains('message-card');
     }
-    console.log('mes', message)
-    console.log('prev', previousMessage)
-    console.log('bool', isNextDay)
 
     if (message.dataset.uid === previousMessage.dataset.uid && !isNextDay) {
         const avatar = message.querySelector('.avatar')
         avatar.remove()
+    } else {
+        //докинуть создание разделительного блока
     }
 }
+
