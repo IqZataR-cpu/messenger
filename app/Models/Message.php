@@ -54,6 +54,11 @@ class Message extends Model
         return $this->morphOne(Attachment::class, 'imaginable');
     }
 
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'imaginable');
+    }
+
     public function isEdited()
     {
         return $this->updated_at > $this->created_at;

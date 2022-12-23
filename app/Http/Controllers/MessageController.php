@@ -16,10 +16,14 @@ class MessageController extends Controller
         $this->sentMessageService = $sentMessageService;
     }
 
-    public function sent(Request $request)
+    public function sent(Chat $chat, Request $request)
     {
-        $chat = Chat::findOrFail($request->chat_id);
+        $message = $this->sentMessageService->sent($chat, Auth::user(), $request->message, $request->attachments);
 
-        $message = $this->sentMessageService->sent($chat, Auth::user(), $request->message);
+        if (!$message) {
+            return response()->json(['status' => 'failed'], 422);
+        }
+
+        return response()->json(['status' => 'success'], 228);
     }
 }
