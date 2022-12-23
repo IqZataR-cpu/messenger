@@ -17,7 +17,7 @@ export class Chat {
     MESSAGES_LIMIT = 10;
     isMessagesFetching;
     currentUser;
-    attacments = [];
+    attachments = [];
 
     constructor(chatTab, chatPanel, currentUser) {
         this.panel = chatPanel;
@@ -47,7 +47,7 @@ export class Chat {
     }
 
     getAttachments() {
-        return this.attacments
+        return this.attachments
     }
 
     findViewedDay(rawDay) {
@@ -77,7 +77,7 @@ export class Chat {
 
         reader.addEventListener('load', (event) => {
             const uploaded_image = event.target.result;
-            this.attacments.push(file);
+            this.attachments.push(file);
             container.style.backgroundImage = `url(${uploaded_image})`;
         });
 
@@ -169,10 +169,11 @@ export class Input {
     minHeight = 40;
     maxHeight = 160;
     htmlElement;
+    _chat;
 
-    constructor(htmlElement) {
+    constructor(htmlElement, chat) {
         this.htmlElement = htmlElement;
-        htmlElement.addEventListener('keyup', event => this.onKeyUp(event))
+        this._chat = chat;
     }
 
     resizeArea() {
@@ -188,9 +189,13 @@ export class Input {
         this.htmlElement.style.height = height + 'px';
     }
 
+    getMessage() {
+        return this.htmlElement.value;
+    }
+
     handleEnterKey(event) {
         if (event.keyCode === this.ENTER_KEY_CODE && !event.shiftKey) {
-            sendMessage(this.htmlElement); 
+            sendMessage(this.getMessage(), this._chat);
             this.clearInput(this.htmlElement)
         }
     }
@@ -338,13 +343,13 @@ function removeMessageAvatar(message) {
     }
 }
 
-async function sendMessage(message) {
-    console.log(Chat)
+async function sendMessage(message, chat) {
+
     const data = {
-        messsage: message.value,
-        attachments: Chat.getAttachments(),
+        messsage: message,
+        attachments: chat.getAttachments(),
     };
-    const url = ''
+    const url = `/chat/${chat.getId()}/sent-message`
 
     fetch(url, {
         method: 'POST',

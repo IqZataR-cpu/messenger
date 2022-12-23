@@ -8,10 +8,9 @@ window.Alpine = Alpine;
 Alpine.start();
 
 let currentUser;
-let inputs = document.querySelectorAll('.message-input');
 
 inputs.forEach(function (input) {
-    input = new Input(input);
+
 })
 
 
@@ -31,8 +30,11 @@ let chatTabs = [...document.querySelectorAll('.chat-tab')];
 let chats = chatTabs.map(tab => {
     let panel = document.querySelector(`#${tab.getAttribute('aria-controls')}`)
     let content = panel.querySelector('.chat-content');
+    let chat = new Chat(tab, new Panel(panel, content), currentUser);
+    let input = new Input(panel.querySelector('.message-input'), chat);
+    input.htmlElement.addEventListener('keyup', input.onKeyUp)
 
-    return new Chat(tab, new Panel(panel, content), currentUser);
+    return chat;
 })
 
 chats.forEach(chat => {
@@ -64,14 +66,14 @@ chats.forEach(chat => {
         event.preventDefault();
 
         const fileList = event.dataTransfer.files;
-        const attacments = chat.panel.container.querySelector(".attachments") 
+        const attacments = chat.panel.container.querySelector(".attachments")
         const attachmentContainer = chat.createAttachmentContainer(attacments)
 
         attacments.append(attachmentContainer)
 
         attachmentContainer.querySelector('.attachment-name').textContent = fileList[0].name;
-        
+
         chat.saveImage(fileList[0], attachmentContainer.querySelector('.attachment-photo'));
-    });  
+    });
 })
 
