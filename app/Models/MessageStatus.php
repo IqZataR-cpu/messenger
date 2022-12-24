@@ -32,4 +32,24 @@ class MessageStatus extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public static function sent()
+    {
+        return MessageStatus::where('status', self::SENT)->first();
+    }
+
+    public static function read()
+    {
+        return MessageStatus::where('status', self::READ)->first();
+    }
+
+    public static function received()
+    {
+        return MessageStatus::where('status', self::RECEIVED)->first();
+    }
+
+    public static function notRead()
+    {
+        return MessageStatus::where('status', self::NOT_READ)->first();
+    }
 }

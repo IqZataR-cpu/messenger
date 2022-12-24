@@ -1,4 +1,6 @@
 "use strict";
+import {getChatMessages, sentMessage} from "./api";
+
 const DAY_IN_MICROSECONDS = 86400000;
 const DAYS = [
     'Воскресенье',
@@ -91,7 +93,7 @@ export class Chat {
 
         this.isMessagesFetching = true;
 
-        fetch(`/chats/${this.getId()}/messages?offset=${this.messagesOffset}`)
+        getChatMessages(this.getId(), this.messagesOffset)
             .then(resp => resp.json())
             .then(async response => {
                 let messages = [...response.data];
@@ -245,12 +247,14 @@ function createMessageContainer(message) {
     messageHeader.append(createAvatarContainer(message.user.avatar.link), phoneContainer, nameContainer);
     container.append(messageHeader);
 
-    if (message.attachment) {
-        let attachmentContainer = document.createElement('img');
-        attachmentContainer.src = message.attachment.link;
-        attachmentContainer.classList.value = 'sm:max-w-[380px] sm:max-h-[380px] rounded-md';
-        attachmentContainer.alt = 'image';
-        container.append(attachmentContainer);
+    if (message.attachments) {
+        for (const attachment of message.attachments) {
+            let attachmentContainer = document.createElement('img');
+            attachmentContainer.src = message.attachment.link;
+            attachmentContainer.classList.value = 'sm:max-w-[380px] sm:max-h-[380px] rounded-md';
+            attachmentContainer.alt = 'image';
+            container.append(attachmentContainer);
+        }
     }
 
     let messageContent = document.createElement('div');
@@ -307,16 +311,15 @@ function createDayContainer(date) {
     return container;
 }
 
-function scrollToMessage(message) {
-    message.scrollIntoView(true);
-    message.parentElement.scrollBy(0, -100)
+function scrollToMessage(message, scrollToTop = true) {
+    message.scrollIntoView(scrollToTop);
+    message.parentElement.scrollBy(0, scrollToTop ? -100 : 100)
 }
 
 function removeMessageAvatar(message) {
     let previousMessage = message.previousElementSibling;
     let isPreviousMessageContainer = previousMessage.classList.contains('message-card');
     let isNextDay = false
-    console.log(isPreviousMessageContainer)
 
     while (!isPreviousMessageContainer) {
         if (previousMessage.classList.contains('user-cards-container')) {
@@ -344,23 +347,12 @@ function removeMessageAvatar(message) {
 }
 
 async function sendMessage(message, chat) {
-
-    const data = {
-        messsage: message,
-        attachments: chat.getAttachments(),
-    };
-    const url = `/chat/${chat.getId()}/sent-message`
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    sentMessage(message, chat.getAttachments(), chat.getId())
         .then((response) => response.json())
         .then((data) => {
-            console.log('Success:', data);
+            let message = createMessageContainer(data.data);
+            chat.panel.contentContainer.append(message);
+            scrollToMessage(message, false);
         })
         .catch((error) => {
             console.error('Error:', error);

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Attachment;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\MessageStatus;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,9 @@ class SentMessageService
 
                 $message->attachment()->save($attachment);
             }
+
+            $message->statuses()->attach(MessageStatus::sent());
+            $message->statuses()->attach(MessageStatus::notRead());
         });
 
         return $message;

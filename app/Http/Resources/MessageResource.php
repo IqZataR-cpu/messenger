@@ -27,7 +27,7 @@ class MessageResource extends JsonResource
             'is_edited' => $this->resource->isEdited(),
             'is_mine' => $this->resource->user->is(Auth::user()),
             'user' => $this->whenLoaded('user'),
-            'attachment' => $this->whenLoaded('attachment'),
+            'attachments' => $this->whenLoaded('attachments'),
             'statuses' => $this->whenLoaded('statuses'),
         ];
     }

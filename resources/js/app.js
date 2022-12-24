@@ -2,6 +2,7 @@ import './bootstrap';
 import {Chat, Input, Panel} from './chat.js';
 
 import Alpine from 'alpinejs';
+import {getCurrentUser} from "./api";
 
 window.Alpine = Alpine;
 
@@ -9,12 +10,7 @@ Alpine.start();
 
 let currentUser;
 
-inputs.forEach(function (input) {
-
-})
-
-
-await fetch('/me')
+await getCurrentUser()
     .then(response => response.json())
     .then(response => currentUser = response);
 
@@ -32,7 +28,7 @@ let chats = chatTabs.map(tab => {
     let content = panel.querySelector('.chat-content');
     let chat = new Chat(tab, new Panel(panel, content), currentUser);
     let input = new Input(panel.querySelector('.message-input'), chat);
-    input.htmlElement.addEventListener('keyup', input.onKeyUp)
+    input.htmlElement.addEventListener('keyup', event => input.onKeyUp(event))
 
     return chat;
 })
@@ -51,6 +47,7 @@ chats.forEach(chat => {
         if (currentY < previousY && currentY === 0) {
             chat.loadMessages();
         }
+
         previousY = currentY;
     });
 

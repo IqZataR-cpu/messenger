@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Services\SentMessageService;
 use Illuminate\Http\Request;
@@ -24,6 +25,6 @@ class MessageController extends Controller
             return response()->json(['status' => 'failed'], 422);
         }
 
-        return response()->json(['status' => 'success'], 228);
+        return MessageResource::make($message->load('statuses', 'attachments', 'user.avatar'));
     }
 }
