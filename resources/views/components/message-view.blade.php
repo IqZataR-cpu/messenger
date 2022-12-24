@@ -17,7 +17,7 @@
             @endforeach
         </div>
     @endif
-    <div class="text-[15px]">
+    <div class="text-[15px] break-all">
         {{ $text }}
         <span class="absolute bottom-1 right-1 text-slate-500 text-[12px]">@if($isEdited)изменено <i class="far fa-edit"></i>@endif {{ $date }}</span>
     </div>
