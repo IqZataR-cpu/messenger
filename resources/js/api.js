@@ -10,18 +10,22 @@ export async function getChatMessages(id, messagesOffset) {
 
 export async function sentMessage(message, attachments, chatId) {
     const url = `/chats/${chatId}/sent-message`
+    let formData = new FormData();
 
-    const data = {
-        _token: csrfToken,
-        message: message,
-        attachments: attachments,
-    };
+    // formData.append('_token', csrfToken)
+    formData.append('message', message)
+    formData.append('attachments', attachments)
+
+    console.log(csrfToken) 
 
     return fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN' : csrfToken,
+            'Content-Type': 'multipart/form-data; boundary=something',
+            // 'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify(data),
+
+        body: formData
     })
 }
