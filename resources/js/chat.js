@@ -248,13 +248,17 @@ function createMessageContainer(message) {
     container.append(messageHeader);
 
     if (message.attachments) {
-        for (const attachment of message.attachments) {
+        let messageAttachments = document.createElement('div');
+        messageAttachments.classList.add('flex', 'gap-2', 'my-2', 'flex-wrap');
+        container.append(messageAttachments);
+
+        message.attachments.forEach(attachment => {
             let attachmentContainer = document.createElement('img');
-            attachmentContainer.src = message.attachment.link;
-            attachmentContainer.classList.value = 'sm:max-w-[380px] sm:max-h-[380px] rounded-md';
+            attachmentContainer.src = attachment.link;
+            attachmentContainer.classList.value = 'sm:max-w-100 sm:max-h-[380px] h-100 rounded-md';
             attachmentContainer.alt = 'image';
-            container.append(attachmentContainer);
-        }
+            messageAttachments.append(attachmentContainer);
+        });
     }
 
     let messageContent = document.createElement('div');

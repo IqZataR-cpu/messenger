@@ -12,11 +12,8 @@ export async function sentMessage(message, attachments, chatId) {
     const url = `/chats/${chatId}/sent-message`
     let formData = new FormData();
 
-    // formData.append('_token', csrfToken)
     formData.append('message', message)
-    formData.append('attachments', attachments)
-
-    console.log(csrfToken)
+    attachments.forEach(attachment => formData.append('attachments[]', attachment))
 
     return fetch(url, {
         method: 'POST',
@@ -24,7 +21,6 @@ export async function sentMessage(message, attachments, chatId) {
             'X-CSRF-TOKEN' : csrfToken,
             'Accept': 'application/json'
         },
-
         body: formData
     })
 }

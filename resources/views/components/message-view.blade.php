@@ -10,8 +10,12 @@
         <span>{{ $user->phone }}</span>
         <span>{{ $user->name }}</span>
     </div>
-    @if ($attachment)
-        <img src="{{ $attachment->link }}" class="sm:max-w-[380px] sm:max-h-[380px] rounded-md" alt="image">
+    @if ($attachments)
+        <div class="flex gap-2 flex-wrap my-2">
+            @foreach($attachments as $attachment)
+                <img src="{{ $attachment->link }}" class="sm:max-w-100 sm:max-h-[380px] h-100 rounded-md" alt="image">
+            @endforeach
+        </div>
     @endif
     <div class="text-[15px]">
         {{ $text }}

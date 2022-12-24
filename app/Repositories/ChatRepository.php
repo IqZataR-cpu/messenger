@@ -11,7 +11,7 @@ class ChatRepository
     {
         return $chat->messages()
             ->latest()
-            ->with('attachment', 'user.avatar', 'statuses')
+            ->with('attachments', 'user.avatar', 'statuses')
             ->take($limit)
             ->offset($offset)
             ->get();

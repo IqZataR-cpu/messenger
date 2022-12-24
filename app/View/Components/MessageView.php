@@ -26,7 +26,7 @@ class MessageView extends Component
     {
         $data = [
             'text' => $this->message->text,
-            'attachment' => $this->message->attachment,
+            'attachments' => $this->message->attachments,
             'user' => $this->message->user,
             'isMine' => $this->message->user->is(Auth::user()),
             'userMessagesCount' => $this->userMessagesCount,

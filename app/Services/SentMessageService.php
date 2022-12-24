@@ -9,6 +9,7 @@ use App\Models\MessageStatus;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SentMessageService
 {
@@ -38,10 +39,13 @@ class SentMessageService
             }
 
             foreach ($attachments as $file) {
-                $path = $file->storeAs('/attachments/', $file->getClientOriginalName());
-                $attachment = new Attachment(['link' => url($path)]);
-
+                $attachment = new Attachment(['link' => 'temp']);
                 $message->attachment()->save($attachment);
+                $fileName = Str::random(32) . '_' . $attachment->id . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('attachments', $fileName);
+
+                $attachment->link = $fileName;
+                $attachment->save();
             }
         });
 
