@@ -30,15 +30,19 @@ class SentMessageService
             $message->user()->associate($user);
             $message->save();
 
+            $message->statuses()->attach(MessageStatus::sent());
+            $message->statuses()->attach(MessageStatus::notRead());
+
+            if (!$attachments) {
+                return;
+            }
+
             foreach ($attachments as $file) {
                 $path = $file->storeAs('/attachments/', $file->getClientOriginalName());
                 $attachment = new Attachment(['link' => url($path)]);
 
                 $message->attachment()->save($attachment);
             }
-
-            $message->statuses()->attach(MessageStatus::sent());
-            $message->statuses()->attach(MessageStatus::notRead());
         });
 
         return $message;

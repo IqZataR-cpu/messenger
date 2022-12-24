@@ -16,14 +16,13 @@ export async function sentMessage(message, attachments, chatId) {
     formData.append('message', message)
     formData.append('attachments', attachments)
 
-    console.log(csrfToken) 
+    console.log(csrfToken)
 
     return fetch(url, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN' : csrfToken,
-            'Content-Type': 'multipart/form-data; boundary=something',
-            // 'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json'
         },
 
         body: formData
