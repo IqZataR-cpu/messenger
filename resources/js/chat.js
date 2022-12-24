@@ -1,5 +1,5 @@
 "use strict";
-import {getChatMessages, sentMessage} from "./api";
+import { getChatMessages, sentMessage } from "./api";
 
 const DAY_IN_MICROSECONDS = 86400000;
 const DAYS = [
@@ -56,17 +56,28 @@ export class Chat {
         return this.panel.contentContainer.querySelector(`.day-container[data-raw-day="${rawDay}"]`);
     }
 
-    createAttachmentContainer(parent) {
+    createAttachmentContainer() {
         const attachmentContainer = document.createElement("div");
         const attachmentPhoto = document.createElement("div");
         const attachmentName = document.createElement("p");
+        const closeBtn = document.createElement('p')
 
         attachmentContainer.classList.add('attachment-container')
         attachmentPhoto.classList.add('attachment-photo')
         attachmentName.classList.add('attachment-name')
+        closeBtn.classList.add('attachment-close-btn')
 
+        closeBtn.innerHTML = "x"
+
+        //Перенести в css
         attachmentPhoto.style.width = "100px"
         attachmentPhoto.style.height = "100px"
+
+        closeBtn.style.color = "black"
+        closeBtn.style.cursor = "pointer"
+        //
+
+        attachmentPhoto.append(closeBtn)
 
         attachmentContainer.append(attachmentPhoto)
         attachmentContainer.append(attachmentName)
@@ -74,12 +85,29 @@ export class Chat {
         return (attachmentContainer)
     }
 
+    deleteAttachments() {
+        const attachmentContainer = this.panel.container.querySelector('.attachments')
+        attachmentContainer.replaceChildren();
+
+        this.attachments = [];
+    }
+
     saveImage(file, container) {
         const reader = new FileReader();
 
         reader.addEventListener('load', (event) => {
             const uploaded_image = event.target.result;
+            const delBtn = container.querySelector('.attachment-close-btn')
+
             this.attachments.push(file);
+
+            delBtn.onclick = (event) => {
+                this.attachments.forEach((attachment, index) => {
+                    attachment === file ? this.attachments.splice(index, 1) : null
+                })
+                event.target.parentElement.parentElement.remove()
+            }
+
             container.style.backgroundImage = `url(${uploaded_image})`;
         });
 
@@ -90,7 +118,7 @@ export class Chat {
         if (this.isMessagesFetching) {
             return;
         }
-
+        
         this.isMessagesFetching = true;
 
         getChatMessages(this.getId(), this.messagesOffset)
@@ -151,8 +179,6 @@ export class Chat {
     getLastViewedUser() {
         return this.panel.contentContainer.querySelector('.user-cards-container');
     }
-
-
 }
 
 export class Panel {
@@ -357,6 +383,7 @@ async function sendMessage(message, chat) {
             let message = createMessageContainer(data.data);
             chat.panel.contentContainer.append(message);
             scrollToMessage(message, false);
+            chat.deleteAttachments()
         })
         .catch((error) => {
             console.error('Error:', error);
