@@ -288,7 +288,7 @@ function createMessageContainer(message) {
     }
 
     let messageContent = document.createElement('div');
-    messageContent.classList.value = 'text-[15px]';
+    messageContent.classList.value = 'text-[15px] break-all';
     messageContent.innerHTML = message.text;
     let metaMessageContent = document.createElement('span');
     metaMessageContent.append(message.date);
