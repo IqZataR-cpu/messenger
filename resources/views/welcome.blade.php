@@ -405,24 +405,7 @@
 </head>
 <body class="antialiased">
 <div
-    class="before:block before:absolute before:h-48 before:bg-emerald-600 bg-[#00a783] before:w-full before:top-0 relative flex justify-center min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 py-4 sm:pt-14 sm:pt-0">
-    @if (Route::has('login'))
-        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-            @auth
-                <a href="{{ url('/dashboard') }}"
-                   class="text-sm text-gray-700 dark:text-gray-500 underline">{{ __("Dashboard") }}</a>
-            @else
-                <a href="{{ route('login') }}"
-                   class="text-sm text-gray-700 dark:text-gray-500 underline">{{ __("Log in") }}</a>
-
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                       class="ml-4 text-sm text-gray-7 00 dark:text-gray-500 underline">{{ __("Register") }}</a>
-                @endif
-            @endauth
-        </div>
-    @endif
-
+    class="before:block before:absolute before:h-48 before:bg-emerald-600 before:w-full before:top-0 relative flex justify-center min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 py-4 sm:pt-14 sm:pt-0">
     <div class="mx-auto sm:px-6 pt-16 lg:px-8 w-11/12" style="max-height:880px">
         <div class="flex h-full">
             <div class="basis-1/3 z-10 bg-white flex flex-col">

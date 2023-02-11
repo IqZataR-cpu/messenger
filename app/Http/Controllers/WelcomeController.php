@@ -10,10 +10,14 @@ class WelcomeController
     {
         $user = Auth::user();
         $contacts = $user->contacts;
-        $chats = $user->chats->load([
-            'users',
-            'avatar',
-        ])->loadUsingLimit('latestMessages');
+        $chats = [];
+
+        if ($user->chats->isNotEmpty()) {
+            $chats = $user->chats->load([
+                'users',
+                'avatar',
+            ])->loadUsingLimit('latestMessages');
+        }
 
         return view('auth.welcome', [
             'chats' => $chats,
@@ -24,8 +28,6 @@ class WelcomeController
 
     public function NotAuthenticatedStartPage()
     {
-        Auth::loginUsingId(1);
-
         if (Auth::check()) {
             return redirect()->route('auth.welcome');
         }

@@ -1,5 +1,6 @@
 import './bootstrap';
 import {Chat, Input, Panel} from './chat.js';
+import {mask as phoneMask} from './phoneMask';
 
 import Alpine from 'alpinejs';
 import {getCurrentUser} from "./api";
@@ -7,6 +8,8 @@ import {getCurrentUser} from "./api";
 window.Alpine = Alpine;
 
 Alpine.start();
+
+phoneMask();
 
 let currentUser;
 
@@ -22,6 +25,7 @@ let chatPreview = new Chat(
     currentUser
 );
 let chatTabs = [...document.querySelectorAll('.chat-tab')];
+
 
 let chats = chatTabs.map(tab => {
     let panel = document.querySelector(`#${tab.getAttribute('aria-controls')}`)

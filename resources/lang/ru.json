@@ -8,6 +8,8 @@
     "Confirm Password": "Подтвердить пароль",
     "Dashboard": "Панель",
     "Email": "E-Mail адрес",
+    "Phone": "Телефон",
+    "Invalid Phone": "Неправильный номер телефона",
     "Email Password Reset Link": "Ссылка для сброса пароля",
     "Forbidden": "Запрещено",
     "Forgot your password?": "Забыли пароль?",

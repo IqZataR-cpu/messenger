@@ -24,42 +24,44 @@
     </div>
     <div class="flex-1 chat-content h-20 overflow-y-auto px-24 py-4 flex flex-col justify-between relative"
          style="background: url({{ asset('images/messages_background.jpg') }}); background-size: contain;">
-        @php
-            $currentMessageUser = $messages->first()->user;
-            $message = $messages->first();
-            $currentDay = $message->created_at->format('m/d/Y');
-            $userMessagesCount = 0;
-        @endphp
-        <x-day-view :createdAt="$message->created_at"></x-day-view>
-        <div class="mt-2 user-cards-container" data-user-id="{{ $currentMessageUser->id }}"></div>
-        @foreach($messages as $message)
-            @if ($message->user->is($currentMessageUser))
-                @php
-                    $userMessagesCount++;
-                @endphp
-                @if ($currentDay != $message->created_at->format('m/d/Y'))
+        @if ($messages)
+            @php
+                $currentMessageUser = $messages->first()->user;
+                $message = $messages->first();
+                $currentDay = $message->created_at->format('m/d/Y');
+                $userMessagesCount = 0;
+            @endphp
+            <x-day-view :createdAt="$message->created_at"></x-day-view>
+            <div class="mt-2 user-cards-container" data-user-id="{{ $currentMessageUser->id }}"></div>
+            @foreach($messages as $message)
+                @if ($message->user->is($currentMessageUser))
                     @php
-                        $currentDay = $message->created_at->format('m/d/Y')
+                        $userMessagesCount++;
                     @endphp
-                    <x-day-view :createdAt="$message->created_at"></x-day-view>
-                @endif
-                <x-message-view :message="$message" userMessagesCount="{{ $userMessagesCount }}"></x-message-view>
-            @else
-                @php
-                    $currentMessageUser = $message->user;
-                    $userMessagesCount = 1;
-                @endphp
-                @if ($currentDay != $message->created_at->format('m/d/Y'))
+                    @if ($currentDay != $message->created_at->format('m/d/Y'))
+                        @php
+                            $currentDay = $message->created_at->format('m/d/Y')
+                        @endphp
+                        <x-day-view :createdAt="$message->created_at"></x-day-view>
+                    @endif
+                    <x-message-view :message="$message" userMessagesCount="{{ $userMessagesCount }}"></x-message-view>
+                @else
                     @php
-                        $currentDay = $message->created_at->format('m/d/Y')
+                        $currentMessageUser = $message->user;
+                        $userMessagesCount = 1;
                     @endphp
-                    <x-day-view :createdAt="$message->created_at"></x-day-view>
+                    @if ($currentDay != $message->created_at->format('m/d/Y'))
+                        @php
+                            $currentDay = $message->created_at->format('m/d/Y')
+                        @endphp
+                        <x-day-view :createdAt="$message->created_at"></x-day-view>
+                    @endif
+                    <div class="mt-2 user-cards-container" data-user-id="{{ $currentMessageUser->id }}"></div>
+                    <x-message-view :message="$message"
+                                    userMessagesCount="{{ $userMessagesCount }}"></x-message-view>
                 @endif
-                <div class="mt-2 user-cards-container" data-user-id="{{ $currentMessageUser->id }}"></div>
-                <x-message-view :message="$message"
-                                userMessagesCount="{{ $userMessagesCount }}"></x-message-view>
-            @endif
-        @endforeach
+            @endforeach
+        @endif
     </div>
     <div
         class="flex space-x-4 text-[24px] items-center p-4 h-max text-slate-500 border-slate-300 bg-slate-200 h-16 w-full">

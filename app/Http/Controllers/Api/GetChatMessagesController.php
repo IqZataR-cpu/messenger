@@ -26,6 +26,12 @@ class GetChatMessagesController
             return throw new AccessDeniedHttpException('Вас нет в этом чате!');
         }
 
-        return MessageResource::collection($this->chatRepository->getWithPagination($chat, $request->offsetGet('offset'), Chat::MESSAGES_LIMIT));
+        return MessageResource::collection(
+            $this->chatRepository->getWithPagination(
+                $chat,
+                $request->offsetGet('offset'),
+                Chat::MESSAGES_LIMIT
+            )
+        );
     }
 }

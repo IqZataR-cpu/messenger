@@ -20,9 +20,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/welcome', ['App\Http\Controllers\WelcomeController', 'AuthenticatedStartPage'])->name('auth.welcome');
     Route::get('chats/{chat}/messages', ['App\Http\Controllers\Api\GetChatMessagesController', 'handle']);
     Route::post('chats/{chat}/sent-message', ['App\Http\Controllers\MessageController', 'sent']);
-    Route::get('/me', function (Request $request) {
-        return $request->user();
-    });
 });
 
 require __DIR__ . '/auth.php';

@@ -390,30 +390,13 @@
 <body class="antialiased">
 <div
     class="before:block before:absolute before:h-48 before:bg-emerald-600 bg-[#00a783] before:w-full before:top-0 relative flex justify-center min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 py-4 sm:pt-14 sm:pt-0">
-    @if (Route::has('login'))
-        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-            @auth
-                <a href="{{ url('/dashboard') }}"
-                   class="text-sm text-gray-700 dark:text-gray-500 underline">{{ __("Dashboard") }}</a>
-            @else
-                <a href="{{ route('login') }}"
-                   class="text-sm text-gray-700 dark:text-gray-500 underline">{{ __("Log in") }}</a>
-
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                       class="ml-4 text-sm text-gray-7 00 dark:text-gray-500 underline">{{ __("Register") }}</a>
-                @endif
-            @endauth
-        </div>
-    @endif
-
     <div class="mx-auto sm:px-6 pt-16 lg:px-8 w-11/12" style="max-height:880px">
         <div class="flex h-full">
             <div class="basis-1/3 z-10 bg-white flex flex-col">
                 <div class="flex bg-slate-200 h-16 space-x-2 px-6 flex-nowrap items-center border-right">
                     <div class="flex items-center h-full">
                         <div class="avatar rounded-full w-12 h-12 bg-slate-500"
-                             style="background-image: url({{$currentUser->avatar->link}}); background-size: cover">
+                             @if ($currentUser->avatar) style="background-image: url({{$currentUser->avatar->link}}); @endif background-size: cover">
                         </div>
                     </div>
                     <div class="status text-ellipsis whitespace-nowrap w-64 overflow-hidden">
@@ -443,7 +426,7 @@
                 <div
                     class="border-r-[1px] flex-1 border-slate-200 overflow-y-auto overflow-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-white-100">
                     <ul role="tablist" class="" aria-orientation="vertical">
-                        @foreach($chats as $chat)
+                        @forelse($chats as $chat)
                             <li id="chat-{{ $chat->id }}"
                                 class="chat-tab hover:bg-slate-100 cursor-pointer px-2 flex"
                                 data-chat-id="{{ $chat->id }}"
@@ -457,18 +440,20 @@
                                     <div class="flex">
                                         <div class="flex-1">{{ $chat->name }}</div>
                                         <div
-                                            class="text-[12px] text-slate-600">{{ $chat->lastMessage->created_at->format("H:m") }}</div>
+                                            class="text-[12px] text-slate-600">{{ optional($chat->lastMessage)->created_at->format("H:m") }}</div>
                                     </div>
                                     <div
                                         class="w-[400px] text-slate-500 text-[14px] text-ellipsis whitespace-nowrap overflow-hidden">
-                                        @if ($chat->lastMessage->user->is($currentUser))
+                                        @if (optional($chat->lastMessage)->user->is($currentUser))
                                             <x-message-status :message="$chat->lastMessage"></x-message-status>
                                         @endif
-                                        {{ $chat->lastMessage->text }}
+                                        {{ optional($chat->lastMessage)->text }}
                                     </div>
                                 </div>
                             </li>
-                        @endforeach
+                        @empty
+
+                        @endforelse
                     </ul>
                 </div>
             </div>
@@ -521,9 +506,11 @@
                         </div>
                     </div>
                 </div>
-                @foreach($chats as $chat)
+                @forelse($chats as $chat)
                     <x-chat-view :chat="$chat"></x-chat-view>
-                @endforeach
+                @empty
+
+                @endforelse
             </div>
             <div class="flex h-16">
             </div>

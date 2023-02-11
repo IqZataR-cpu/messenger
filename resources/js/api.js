@@ -1,7 +1,12 @@
-let csrfToken = document.querySelector('#csrf_token').getAttribute('value');
+let csrfTokenContainer = document.querySelector('#csrf_token');
+let csrfToken = null;
+
+if (csrfTokenContainer) {
+    csrfToken = csrfTokenContainer.getAttribute('value')
+}
 
 export async function getCurrentUser() {
-    return fetch('/me');
+    return fetch('/api/me');
 }
 
 export async function getChatMessages(id, messagesOffset) {
