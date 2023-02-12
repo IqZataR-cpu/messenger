@@ -540,6 +540,7 @@
     </div>
 </div>
 @vite('resources/js/app.js')
+@vite('resources/js/favorite-message.js')
 <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
 </body>
 </html>
