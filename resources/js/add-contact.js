@@ -45,7 +45,7 @@ function renderContacts(contacts) {
             contactContainer.addEventListener('click', () => {
                 addContact(contact.id)
                     .then(resp => {
-                        if (response.status === 500) {
+                        if (resp.status === 500) {
                             throw new Error(response.message);
                         }
 
@@ -67,7 +67,7 @@ function renderContacts(contacts) {
                             }
                         }, 2000)
                     })
-                    .catch(() => {
+                    .catch((exception) => {
                         let errorContainer = document.createElement('div');
                         errorContainer.innerHTML = 'Ошибка'
                         errorContainer.classList.value = 'flex justify-center items-center text-red-600 font-16';
@@ -78,6 +78,8 @@ function renderContacts(contacts) {
                             contactContainer.classList.remove('hidden');
                             errorContainer.remove();
                         }, 2000)
+
+                        throw exception;
                     })
             })
 
