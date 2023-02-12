@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Rules\PhoneNumber;
@@ -37,6 +38,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'login' => ['required', 'string', 'max:25', 'unique:users', 'regexp:[a-Z0-9]+'],
             'phone' => ['nullable', 'string', new PhoneNumber(), 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -44,6 +46,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'login' => $request->login,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);

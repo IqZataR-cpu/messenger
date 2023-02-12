@@ -4,6 +4,9 @@ import {mask as phoneMask} from './phoneMask';
 
 import Alpine from 'alpinejs';
 import {getCurrentUser} from "./api";
+import "./dropdown";
+import "./add-contact";
+import "./modal";
 
 window.Alpine = Alpine;
 
@@ -11,70 +14,71 @@ Alpine.start();
 
 phoneMask();
 
-let currentUser;
+(async (d, w) => {
+    let currentUser;
 
-await getCurrentUser()
-    .then(response => response.json())
-    .then(response => currentUser = response);
+    await getCurrentUser()
+        .then(response => response.json())
+        .then(response => currentUser = response);
 
-let previousY = 0;
-let chatPreviewPanelContainer = document.querySelector('.chat-preview')
-let chatPreview = new Chat(
-    null,
-    new Panel(chatPreviewPanelContainer, chatPreviewPanelContainer.querySelector('.chat-content')),
-    currentUser
-);
-let chatTabs = [...document.querySelectorAll('.chat-tab')];
+    let previousY = 0;
+    let chatPreviewPanelContainer = document.querySelector('.chat-preview')
+    let chatPreview = new Chat(
+        null,
+        new Panel(chatPreviewPanelContainer, chatPreviewPanelContainer.querySelector('.chat-content')),
+        currentUser
+    );
+    let chatTabs = [...document.querySelectorAll('.chat-tab')];
 
 
-let chats = chatTabs.map(tab => {
-    let panel = document.querySelector(`#${tab.getAttribute('aria-controls')}`)
-    let content = panel.querySelector('.chat-content');
-    let chat = new Chat(tab, new Panel(panel, content), currentUser);
-    let input = new Input(panel.querySelector('.message-input'), chat);
-    input.htmlElement.addEventListener('keyup', event => input.onKeyUp(event))
+    let chats = chatTabs.map(tab => {
+        let panel = document.querySelector(`#${tab.getAttribute('aria-controls')}`)
+        let content = panel.querySelector('.chat-content');
+        let chat = new Chat(tab, new Panel(panel, content), currentUser);
+        let input = new Input(panel.querySelector('.message-input'), chat);
+        input.htmlElement.addEventListener('keyup', event => input.onKeyUp(event))
 
-    return chat;
-})
+        return chat;
+    })
 
-chats.forEach(chat => {
-    chat.close()
-    chat.tab.onclick = () => {
-        chats.forEach(chat => chat.close())
-        chatPreview.close()
-        chat.open();
-    }
-
-    chat.panel.contentContainer.addEventListener('scroll', function(e) {
-        let currentY = this.scrollTop;
-
-        if (currentY < previousY && currentY === 0) {
-            chat.loadMessages();
+    chats.forEach(chat => {
+        chat.close()
+        chat.tab.onclick = () => {
+            chats.forEach(chat => chat.close())
+            chatPreview.close()
+            chat.open();
         }
 
-        previousY = currentY;
-    });
+        chat.panel.contentContainer.addEventListener('scroll', function (e) {
+            let currentY = this.scrollTop;
 
-    chat.panel.container.addEventListener('dragover', (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
+            if (currentY < previousY && currentY === 0) {
+                chat.loadMessages();
+            }
 
-    });
+            previousY = currentY;
+        });
 
-    chat.panel.container.addEventListener('drop', (event) => {
-        event.stopPropagation();
-        event.preventDefault();
+        chat.panel.container.addEventListener('dragover', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
 
-        const fileList = event.dataTransfer.files;
-        const attacments = chat.panel.container.querySelector(".attachments")
-        const attachmentContainer = chat.createAttachmentContainer(attacments)
+        });
 
-        attacments.append(attachmentContainer)
+        chat.panel.container.addEventListener('drop', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
 
-        attachmentContainer.querySelector('.attachment-name').textContent = fileList[0].name;
+            const fileList = event.dataTransfer.files;
+            const attacments = chat.panel.container.querySelector(".attachments")
+            const attachmentContainer = chat.createAttachmentContainer(attacments)
 
-        chat.saveImage(fileList[0], attachmentContainer.querySelector('.attachment-photo'));
-    });
-})
+            attacments.append(attachmentContainer)
 
+            attachmentContainer.querySelector('.attachment-name').textContent = fileList[0].name;
+
+            chat.saveImage(fileList[0], attachmentContainer.querySelector('.attachment-photo'));
+        });
+    })
+})(document, window);

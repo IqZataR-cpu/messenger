@@ -6,7 +6,13 @@ if (csrfTokenContainer) {
 }
 
 export async function getCurrentUser() {
-    return fetch('/api/me');
+    return fetch('/me', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN' : csrfToken,
+            'Accept': 'application/json'
+        },
+    });
 }
 
 export async function getChatMessages(id, messagesOffset) {
@@ -27,5 +33,42 @@ export async function sentMessage(message, attachments, chatId) {
             'Accept': 'application/json'
         },
         body: formData
+    })
+}
+
+export async function getContacts()
+{
+    return fetch(`/contacts`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN' : csrfToken,
+            'Accept': 'application/json'
+        },
+    })
+}
+
+export async function findContacts(search)
+{
+    return fetch(`/contacts/search`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN' : csrfToken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'search': search})
+    })
+}
+
+export async function addContact(id)
+{
+    return fetch(`/contacts/add`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN' : csrfToken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'contact_id': id})
     })
 }

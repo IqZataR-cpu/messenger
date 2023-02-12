@@ -28,10 +28,6 @@ class WelcomeController
 
     public function NotAuthenticatedStartPage()
     {
-        if (Auth::check()) {
-            return redirect()->route('auth.welcome');
-        }
-
-        return view('welcome');
+        return redirect()->route('auth.welcome');
     }
 }

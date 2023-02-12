@@ -39,3 +39,30 @@
 .mine {
     background: #d1f8d1;
 }
+
+.ti-\[30px\] {
+    text-indent: 30px;
+}
+
+.waiting-element {
+    animation: 3s linear 0s normal none infinite running rot;
+    -webkit-animation: 3s linear 0s normal none infinite running rot;
+    width: 30px;
+}
+
+@keyframes rot {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes rot {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

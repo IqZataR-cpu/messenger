@@ -1,4 +1,4 @@
-@props(['name', 'description', 'content', 'tab'])
+@props(['name', 'description', 'messages', 'tab'])
 
 <div class="chat-panel flex flex-1 flex-col w-100" aria-labelledby="chat-{{$tab}}" role="tabpanel"
      id="chat-{{$tab}}-panel" data-chat-id="{{ $tab }}" aria-hidden="true" style="display: none">

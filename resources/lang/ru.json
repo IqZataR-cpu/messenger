@@ -8,6 +8,7 @@
     "Confirm Password": "Подтвердить пароль",
     "Dashboard": "Панель",
     "Email": "E-Mail адрес",
+    "Email or Login": "E-Mail адрес или Логин",
     "Phone": "Телефон",
     "Invalid Phone": "Неправильный номер телефона",
     "Email Password Reset Link": "Ссылка для сброса пароля",
@@ -55,5 +56,9 @@
     "Unauthorized": "Не авторизован",
     "Verify Email Address": "Подтвердить email-адрес",
     "Whoops!": "Упс!",
-    "You are receiving this email because we received a password reset request for your account.": "Вы получили это письмо, потому что мы получили запрос на сброс пароля для Вашей учётной записи."
+    "You are receiving this email because we received a password reset request for your account.": "Вы получили это письмо, потому что мы получили запрос на сброс пароля для Вашей учётной записи.",
+    "Create group chat": "Новый групповой чат",
+    "Account settings": "Настройки",
+    "Profile settings": "Редактировать профиль",
+    "Add contact": "Добавить контакт"
 }

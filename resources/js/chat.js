@@ -118,7 +118,7 @@ export class Chat {
         if (this.isMessagesFetching) {
             return;
         }
-        
+
         this.isMessagesFetching = true;
 
         getChatMessages(this.getId(), this.messagesOffset)
@@ -252,7 +252,10 @@ function createAvatarContainer(link) {
 
     container.classList.value = 'flex items-center h-full';
     avatar.classList.value = 'avatar rounded-full w-8 h-8 bg-slate-500';
-    avatar.style.backgroundImage = `url(${link})`;
+
+    if (link) {
+        avatar.style.backgroundImage = `url(${link})`;
+    }
 
     container.append(avatar);
 
@@ -270,7 +273,15 @@ function createMessageContainer(message) {
     let nameContainer = document.createElement('span');
     nameContainer.innerHTML = message.user.name;
 
-    messageHeader.append(createAvatarContainer(message.user.avatar.link), phoneContainer, nameContainer);
+    messageHeader.append(
+        createAvatarContainer(
+        message.user.hasOwnProperty('avatar')
+                ? message.user.avatar.link
+                : ''
+        ),
+        phoneContainer,
+        nameContainer
+    );
     container.append(messageHeader);
 
     if (message.attachments) {

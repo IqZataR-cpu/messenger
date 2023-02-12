@@ -389,27 +389,48 @@
 </head>
 <body class="antialiased">
 <div
-    class="before:block before:absolute before:h-48 before:bg-emerald-600 bg-[#00a783] before:w-full before:top-0 relative flex justify-center min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 py-4 sm:pt-14 sm:pt-0">
+    class="before:block before:absolute before:h-44 before:bg-emerald-600 bg-[#00a783] before:w-full before:top-0 relative flex justify-center min-h-screen bg-gradient-to-b from-slate-200 to-slate-400 py-4 sm:pt-14 sm:pt-0">
     <div class="mx-auto sm:px-6 pt-16 lg:px-8 w-11/12" style="max-height:880px">
         <div class="flex h-full">
-            <div class="basis-1/3 z-10 bg-white flex flex-col">
+            <div class="basis-1/3 z-10 bg-white flex flex-col relative">
                 <div class="flex bg-slate-200 h-16 space-x-2 px-6 flex-nowrap items-center border-right">
                     <div class="flex items-center h-full">
                         <div class="avatar rounded-full w-12 h-12 bg-slate-500"
-                             @if ($currentUser->avatar) style="background-image: url({{$currentUser->avatar->link}}); @endif background-size: cover">
+                             style="background-image: url(
+                             @if ($currentUser->avatar)
+                                {{$currentUser->avatar->link}}
+                             @endif()
+                             );  background-size: cover">
                         </div>
                     </div>
                     <div class="status text-ellipsis whitespace-nowrap w-64 overflow-hidden">
                         {{ $currentUser->description }}
                     </div>
                     <div
-                        class="control-buttons text-gray-500 text-[18px] flex justify-end space-x-6 mr-6 items-center flex-1 h-full">
-                        <i class="fa-solid fa-message"></i>
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                        class="control-buttons relative text-gray-500 text-[18px] flex justify-end mr-6 items-center flex-1 h-full">
+                        <div class="icon rounded-full w-12 h-12 flex justify-center hover:bg-slate-300 hover:cursor-pointer items-center">
+                            <i class="fa-solid fa-message"></i>
+                        </div>
+                        <div class="icon rounded-full w-12 h-12 flex justify-center hover:bg-slate-300 hover:cursor-pointer items-center data-dropdown-menu-btn" data-target="user-dropdown">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                        <div class="dropdown absolute hidden right-0 top-[50px] z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none user-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                                <a class="text-gray-700 cursor-pointer hover:bg-slate-100 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">{{ __('Account settings') }}</a>
+                                <a class="text-gray-700 cursor-pointer hover:bg-slate-100 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">{{ __('Create group chat') }}</a>
+                                <a class="text-gray-700 cursor-pointer hover:bg-slate-100 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">{{ __('Profile settings') }}</a>
+                                <a class="text-gray-700 cursor-pointer hover:bg-slate-100 block px-4 py-2 text-sm modal-open-button" data-target="add-contact-form" role="menuitem" tabindex="-1" id="menu-item-2">{{ __('Add contact') }}</a>
+                                <form method="POST" action="{{ route('logout') }}" role="none">
+                                    {{ csrf_field() }}
+                                    <button type="submit" class="text-gray-700 hover:bg-slate-100 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1" id="menu-item-3">{{ __('Log Out') }}</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="border-r border-b border-slate-200">
-                    <div class="flex h-10 px-4 items-center drop-shadow">
+                    <div class="flex h-12 px-4 items-center drop-shadow">
                         <label class="relative block flex-1">
                             <span class="sr-only">Search</span>
                             <span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -456,6 +477,7 @@
                         @endforelse
                     </ul>
                 </div>
+                <x-add-contact></x-add-contact>
             </div>
             <div class="flex basis-2/3 z-10">
                 <div class="chat-panel chat-preview flex flex-1 flex-col w-100">
