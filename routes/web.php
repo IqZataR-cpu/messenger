@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('contacts', ['App\Http\Controllers\Api\Contact\GetContacts', 'get']);
     Route::post('chats', ['App\Http\Controllers\Api\Chat\CreateChat', 'create']);
     Route::post('profile/update', ['App\Http\Controllers\Api\User\UpdateProfile', 'update']);
+    Route::post('chats/{chat}/read-messages', ['App\Http\Controllers\Api\Chat\ReadMessages', 'read']);
 
     Route::post('/me', function (Request $request) {
         return $request->user();

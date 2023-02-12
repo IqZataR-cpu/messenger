@@ -336,8 +336,16 @@ function createDayContainer(date) {
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).valueOf();
     var other = dayName.valueOf();
 
+    function formatDate(date) {
+        if (date < 10) {
+            return `0${date}`
+        }
+
+        return date;
+    }
+
     if (other < today - DAY_IN_MICROSECONDS * 5) {
-        dayName = `${dayName.getDate()}.${dayName.getMonth() + 1}.${dayName.getFullYear()}`;
+        dayName = `${(formatDate(dayName.getDate()))}.${ formatDate(dayName.getMonth() + 1) }.${dayName.getFullYear()}`;
     } else if (other < today - DAY_IN_MICROSECONDS * 2) { // 24*60*60*1000
         dayName = DAYS[dayName.getDay()];
     } else if (other < today - DAY_IN_MICROSECONDS) { // 24*60*60*1000

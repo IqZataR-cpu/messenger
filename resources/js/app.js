@@ -20,7 +20,6 @@ Alpine.start();
 phoneMask();
 
 (async (d, w) => {
-
     await getCurrentUser()
         .then(response => response.json())
         .then(response => currentUser = response);
