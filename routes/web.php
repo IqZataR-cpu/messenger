@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('chats/favorite-messages/{messageId}/add', ['App\Http\Controllers\FavoriteMessageController', 'add']);
     Route::get('chats/favorite-messages/{messageId}/remove', ['App\Http\Controllers\FavoriteMessageController', 'remove']);
+
+    Route::post('chats/search', ['App\Http\Controllers\SearchChatsController', 'search']);
 });
 
 require __DIR__ . '/auth.php';
