@@ -408,7 +408,7 @@
                     </div>
                     <div
                         class="control-buttons relative text-gray-500 text-[18px] flex justify-end mr-6 items-center flex-1 h-full">
-                        <div class="icon rounded-full w-12 h-12 flex justify-center hover:bg-slate-300 hover:cursor-pointer items-center">
+                        <div class="icon rounded-full w-12 h-12 flex justify-center hover:bg-slate-300 hover:cursor-pointer items-center modal-open-button" data-target="select-contact-form">
                             <i class="fa-solid fa-message"></i>
                         </div>
                         <div class="icon rounded-full w-12 h-12 flex justify-center hover:bg-slate-300 hover:cursor-pointer items-center data-dropdown-menu-btn" data-target="user-dropdown">
@@ -478,6 +478,7 @@
                     </ul>
                 </div>
                 <x-add-contact></x-add-contact>
+                <x-select-contact></x-select-contact>
             </div>
             <div class="flex basis-2/3 z-10">
                 <div class="chat-panel chat-preview flex flex-1 flex-col w-100">

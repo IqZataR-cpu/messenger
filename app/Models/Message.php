@@ -64,8 +64,13 @@ class Message extends Model
         return $this->updated_at > $this->created_at;
     }
 
+    public function favorite()
+    {
+        return $this->hasOne(FavoriteMessage::class, 'message_id');
+    }
+
     public function isFavoriteMessage()
     {
-        return FavoriteMessage::where('message_id', $this->id)->exists();
+        return optional($this->favorite)->exists();
     }
 }

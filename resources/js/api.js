@@ -72,3 +72,20 @@ export async function addContact(id)
         body: JSON.stringify({'contact_id': id})
     })
 }
+
+export async function createChat(contacts, name = '', description = '')
+{
+    return fetch(`/chats/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN' : csrfToken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'contacts': contacts,
+            'name': name,
+            'description': description
+        })
+    })
+}

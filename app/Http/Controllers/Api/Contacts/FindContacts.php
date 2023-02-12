@@ -17,9 +17,13 @@ class FindContacts
 
         $contacts = Auth::user()->contacts()->get(['users.id'])->pluck('id')->implode(',');
 
-        return User::whereRaw("name ilike '%'||:search||'%'", ['search' => $request->search])
-            ->whereRaw('id not in (' . $contacts .')')
-            ->limit(50)
+        $query = User::whereRaw("name ilike '%'||:search||'%'", ['search' => $request->search]);
+
+        if ($contacts) {
+            $query->whereRaw('id not in (' . $contacts .')');
+        }
+
+        return $query->limit(50)
             ->get()
             ->map(function (User $contact) {
                 return ContactResource::make($contact)->toArray(request());

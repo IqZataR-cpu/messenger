@@ -11,9 +11,17 @@ class AddContact
 {
     public function add(Request $request): JsonResponse
     {
-        $user = User::findOrFail($request->contact_id);
+        $contact = User::findOrFail($request->contact_id);
+        /**
+         * @var User $user
+         */
+        $user = Auth::user();
 
-        Auth::user()->contacts()->attach($user->id);
+        if (optional($user->contacts()->find($contact->id))->exists) {
+            return response()->json();
+        }
+
+        $user->contacts()->attach($contact->id);
 
         return response()->json();
     }

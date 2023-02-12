@@ -45,7 +45,7 @@ class Chat extends Model
     {
         return $this->messages()
             ->latest()
-            ->with('attachments', 'user.avatar', 'statuses')
+            ->with('attachments', 'user.avatar', 'statuses', 'favorite')
             ->take(self::MESSAGES_LIMIT);
     }
 

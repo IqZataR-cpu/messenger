@@ -6,6 +6,7 @@ import Alpine from 'alpinejs';
 import {getCurrentUser} from "./api";
 import "./dropdown";
 import "./add-contact";
+import "./select-contact";
 import "./modal";
 
 window.Alpine = Alpine;
