@@ -19,6 +19,18 @@
     @endif
     <div class="text-[15px] break-all">
         {{ $text }}
-        <span class="absolute bottom-1 right-1 text-slate-500 text-[12px]">@if($isEdited)изменено <i class="far fa-edit"></i>@endif {{ $date }}</span>
+        <span class="absolute bottom-1 right-1 text-slate-500 text-[12px]">
+            @if($isFavoriteMessage)
+                <i class="fa-solid fa-star favorites" data-message-id="{{$messageId}}" style="cursor: pointer;"></i>
+            @else
+                <i class="fa-regular fa-star favorites" data-message-id="{{$messageId}}" style="cursor: pointer;"></i>
+            @endif
+
+            @if($isEdited)
+                изменено <i class="far fa-edit"></i>
+            @endif
+
+            {{ $date }}
+        </span>
     </div>
 </div>

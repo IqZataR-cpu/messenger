@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/me', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('chats/favorite-messages/{messageId}/add', ['App\Http\Controllers\FavoriteMessageController', 'add']);
+    Route::get('chats/favorite-messages/{messageId}/remove', ['App\Http\Controllers\FavoriteMessageController', 'remove']);
 });
 
 require __DIR__ . '/auth.php';

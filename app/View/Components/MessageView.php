@@ -30,6 +30,8 @@ class MessageView extends Component
             'user' => $this->message->user,
             'isMine' => $this->message->user->is(Auth::user()),
             'userMessagesCount' => $this->userMessagesCount,
+            'messageId' => $this->message->id,
+            'isFavoriteMessage' => $this->message->isFavoriteMessage(),
             'date' => $this->message->created_at->format('H:i'),
             'isEdited' => false
         ];
