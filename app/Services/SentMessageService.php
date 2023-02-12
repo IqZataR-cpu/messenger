@@ -32,7 +32,6 @@ class SentMessageService
             $message->save();
 
             $message->statuses()->attach(MessageStatus::sent());
-            $message->statuses()->attach(MessageStatus::notRead());
 
             if (!$attachments) {
                 return;
@@ -47,6 +46,8 @@ class SentMessageService
                 $attachment->link = $fileName;
                 $attachment->save();
             }
+
+            $message->statuses()->attach(MessageStatus::notRead());
         });
 
         return $message;

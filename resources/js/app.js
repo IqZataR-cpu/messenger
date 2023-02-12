@@ -9,6 +9,10 @@ import "./add-contact";
 import "./select-contact";
 import "./modal";
 
+export var currentUser;
+export var chatPreview;
+export var chats;
+
 window.Alpine = Alpine;
 
 Alpine.start();
@@ -16,7 +20,6 @@ Alpine.start();
 phoneMask();
 
 (async (d, w) => {
-    let currentUser;
 
     await getCurrentUser()
         .then(response => response.json())
@@ -24,15 +27,14 @@ phoneMask();
 
     let previousY = 0;
     let chatPreviewPanelContainer = document.querySelector('.chat-preview')
-    let chatPreview = new Chat(
+    chatPreview = new Chat(
         null,
         new Panel(chatPreviewPanelContainer, chatPreviewPanelContainer.querySelector('.chat-content')),
         currentUser
     );
-    let chatTabs = [...document.querySelectorAll('.chat-tab')];
+    var chatTabs = [...document.querySelectorAll('.chat-tab')];
 
-
-    let chats = chatTabs.map(tab => {
+    chats = chatTabs.map(tab => {
         let panel = document.querySelector(`#${tab.getAttribute('aria-controls')}`)
         let content = panel.querySelector('.chat-content');
         let chat = new Chat(tab, new Panel(panel, content), currentUser);
@@ -82,4 +84,5 @@ phoneMask();
             chat.saveImage(fileList[0], attachmentContainer.querySelector('.attachment-photo'));
         });
     })
+
 })(document, window);

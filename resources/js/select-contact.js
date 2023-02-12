@@ -1,4 +1,4 @@
-import {getContacts} from './api'
+import {createChat, getContacts} from './api'
 import {createContactBlock} from './add-contact'
 
 let contactModal = document.querySelector('.select-contact-form');
@@ -49,12 +49,10 @@ function renderContacts(contacts) {
             let contactContainer = createContactBlock(contact);
 
             contactContainer.addEventListener('click', () => {
-
-
                 createChat([contact.id])
                     .then(resp => {
                         if (resp.status === 500) {
-                            throw new Error(response.message);
+                            throw new Error(resp.message);
                         }
 
                         return resp.json()
@@ -65,15 +63,7 @@ function renderContacts(contacts) {
                         successContainer.classList.value = 'flex justify-center items-center text-emerald-600 font-16';
                         contactContainer.before(successContainer);
                         contactContainer.remove();
-
-                        setTimeout(() => {
-                            contactContainer.remove();
-                            successContainer.remove();
-
-                            if (contactsGroup.children.length <= 1) {
-                                contactsGroup.remove();
-                            }
-                        }, 2000)
+                        window.location.reload();
                     })
                     .catch((exception) => {
                         let errorContainer = document.createElement('div');
@@ -85,7 +75,7 @@ function renderContacts(contacts) {
                         setTimeout(() => {
                             contactContainer.classList.remove('hidden');
                             errorContainer.remove();
-                        }, 2000)
+                        }, 1000)
 
                         throw exception;
                     })

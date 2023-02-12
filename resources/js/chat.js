@@ -1,5 +1,5 @@
 "use strict";
-import { getChatMessages, sentMessage } from "./api";
+import {getChatMessages, sentMessage} from "./api";
 
 const DAY_IN_MICROSECONDS = 86400000;
 const DAYS = [
@@ -276,7 +276,9 @@ function createMessageContainer(message) {
     messageHeader.append(
         createAvatarContainer(
         message.user.hasOwnProperty('avatar')
-                ? message.user.avatar.link
+                ? message.user.avatar
+                    ? message.user.avatar.link
+                    : ''
                 : ''
         ),
         phoneContainer,

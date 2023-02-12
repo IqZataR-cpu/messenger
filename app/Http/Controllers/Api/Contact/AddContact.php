@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Contacts;
+namespace App\Http\Controllers\Api\Contact;
 
 use App\Models\User;
 use Illuminate\Http\JsonResponse;

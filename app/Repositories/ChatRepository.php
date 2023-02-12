@@ -19,7 +19,11 @@ class ChatRepository
 
     public function getChatCompanion(Chat $chat, User $fromUser)
     {
-        return $chat->users->where('id', '!=', $fromUser->id)->first();
+        if ($user = $chat->users->where('id', '!=', $fromUser->id)->first()) {
+            return $user;
+        }
+
+        return $fromUser;
     }
 
     public function existsInChat(User $user, Chat $chat)

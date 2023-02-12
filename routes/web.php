@@ -20,9 +20,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/welcome', ['App\Http\Controllers\WelcomeController', 'AuthenticatedStartPage'])->name('auth.welcome');
     Route::get('chats/{chat}/messages', ['App\Http\Controllers\Api\GetChatMessagesController', 'handle']);
     Route::post('chats/{chat}/sent-message', ['App\Http\Controllers\MessageController', 'sent']);
-    Route::post('contacts/search', ['App\Http\Controllers\Api\Contacts\FindContacts', 'get']);
-    Route::post('contacts/add', ['App\Http\Controllers\Api\Contacts\AddContact', 'add']);
-    Route::post('contacts', ['App\Http\Controllers\Api\Contacts\GetContacts', 'get']);
+    Route::post('contacts/search', ['App\Http\Controllers\Api\Contact\FindContacts', 'get']);
+    Route::post('contacts/add', ['App\Http\Controllers\Api\Contact\AddContact', 'add']);
+    Route::post('contacts', ['App\Http\Controllers\Api\Contact\GetContacts', 'get']);
+    Route::post('chats', ['App\Http\Controllers\Api\Chat\CreateChat', 'create']);
+    Route::post('profile/update', ['App\Http\Controllers\Api\User\UpdateProfile', 'update']);
 
     Route::post('/me', function (Request $request) {
         return $request->user();

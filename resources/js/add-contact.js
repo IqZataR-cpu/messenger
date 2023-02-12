@@ -1,4 +1,4 @@
-import {findContacts, addContact} from './api'
+import {addContact, findContacts} from './api'
 
 let contactModal = document.querySelector('.add-contact-form');
 let contactModalWaitingElement = contactModal.querySelector('.waiting-element');
@@ -55,7 +55,7 @@ function renderContacts(contacts) {
                 addContact(contact.id)
                     .then(resp => {
                         if (resp.status === 500) {
-                            throw new Error(response.message);
+                            throw new Error(resp.message);
                         }
 
                         return resp.json()
@@ -109,11 +109,14 @@ export function createContactBlock(contact) {
 
     contactContainer.append(
         createAvatarContainer(
-            contact.avatar.hasOwnProperty('link')
-                ? contact.avatar.link
+        contact.hasOwnProperty('avatar')
+                ? contact.avatar
+                    ? contact.avatar.link
+                    : ''
                 : ''
         )
     );
+
     contactContainer.append(createContactDescriptionContainer(contact.name, contact.description, contact.login))
 
     return contactContainer;

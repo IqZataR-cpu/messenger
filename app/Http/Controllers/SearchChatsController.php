@@ -24,6 +24,7 @@ class SearchChatsController extends Controller
 
         $messages = $query
             ->orWhere('messages.text', 'LIKE', '%' . $search . '%')
+            ->limit(100)
             ->get()
             ->groupBy('chat_id');
 

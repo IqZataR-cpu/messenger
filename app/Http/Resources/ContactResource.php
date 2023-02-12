@@ -18,12 +18,18 @@ class ContactResource extends JsonResource
      */
     public function toArray($request)
     {
+        $avatar = null;
+
+        if ($this->resource->avatar) {
+            $avatar = AttachmentResource::make($this->resource->avatar);
+        }
+
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'description' => $this->resource->description,
             'login' => $this->resource->login,
-            'avatar' => AttachmentResource::make($this->resource->avatar)
+            'avatar' => $avatar
         ];
     }
 }

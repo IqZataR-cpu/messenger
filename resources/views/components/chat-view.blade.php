@@ -5,7 +5,14 @@
     <div class="flex space-x-2 px-6 border-l-[1px] border-slate-300 bg-slate-200 h-16 w-full">
         <div class="flex items-center h-full">
             <div class="avatar rounded-full w-12 h-12 bg-slate-500"
-                 style="background-image: url({{$avatar->link}}); background-size: cover; background-position: center;">
+                 @if ($avatar)
+                    style="
+                        background-image: url({{$avatar->link}});
+                        background-size: cover;
+                        background-position: center;
+                    "
+                 @endif
+            >
             </div>
         </div>
         <div class="flex flex-col justify-center flex-1">
@@ -24,7 +31,7 @@
     </div>
     <div class="flex-1 chat-content h-20 overflow-y-auto px-24 py-4 flex flex-col justify-between relative"
          style="background: url({{ asset('images/messages_background.jpg') }}); background-size: contain;">
-        @if ($messages)
+        @if ($messages && count($messages) > 0)
             @php
                 $currentMessageUser = $messages->first()->user;
                 $message = $messages->first();

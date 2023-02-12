@@ -3,7 +3,10 @@
         @if ($userMessagesCount == 1)
             <div class="flex items-center h-full">
                 <div class="avatar rounded-full w-8 h-8 bg-slate-500"
-                     style="background-image: url({{ $user->avatar->link }});">
+                     @if ($user->avatar)
+                        style="background-image: url({{ $user->avatar->link }});"
+                     @endif
+                >
                 </div>
             </div>
         @endif

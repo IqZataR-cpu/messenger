@@ -73,7 +73,7 @@ export async function addContact(id)
     })
 }
 
-export async function createChat(contacts, name = '', description = '')
+export async function createChat(contacts, name = '', description = '', isPersonal = true)
 {
     return fetch(`/chats/`, {
         method: 'POST',
@@ -85,7 +85,8 @@ export async function createChat(contacts, name = '', description = '')
         body: JSON.stringify({
             'contacts': contacts,
             'name': name,
-            'description': description
+            'description': description,
+            'is_personal': isPersonal
         })
     })
 }
