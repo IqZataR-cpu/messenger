@@ -507,7 +507,7 @@
                 <div class="flex bg-slate-200 h-16 space-x-2 px-6 flex-nowrap items-center border-right">
                     <div class="flex items-center h-full">
                         <div class="avatar rounded-full w-12 h-12 bg-slate-500"
-                             style="background-image: url({{$currentUser->avatar->link}}); background-size: cover">
+                             @if ($currentUser->avatar) style="background-image: url({{$currentUser->avatar->link}}); @endif background-size: cover">
                         </div>
                     </div>
                     <div class="status text-ellipsis whitespace-nowrap w-64 overflow-hidden">
@@ -543,6 +543,10 @@
                                     data-chat-id="{{ $chat->id }}"
                                     aria-controls="chat-{{$chat->id}}-panel" role="tab">
                                     <div class="flex items-center h-full py-4">
+                                        <input type="checkbox" id="chat-{{$chat->id}}" name="chat-{{$chat->id}}" class="individual-chat" style="
+                                        margin-top: 15px; margin-right: 9px; display: none">
+                                    </div>
+                                    <div class="flex items-center h-full py-4">
                                         <div class="avatar rounded-full w-12 h-12 bg-slate-500"
                                              style="background-image: url({{$chat->avatar->link}}); background-size: cover; background-position: center;">
                                         </div>
@@ -569,6 +573,34 @@
                         <div class="messages-search" style="display: none">
                             <div style="margin: 10px">Сообщения</div>
                         </div>
+                        @forelse($chats->unique as $chat)
+                            <li id="chat-{{ $chat->id }}"
+                                class="chat-tab hover:bg-slate-100 cursor-pointer px-2 flex"
+                                data-chat-id="{{ $chat->id }}"
+                                aria-controls="chat-{{$chat->id}}-panel" role="tab">
+                                <div class="flex items-center h-full py-4">
+                                    <div class="avatar rounded-full w-12 h-12 bg-slate-500"
+                                         style="background-image: url({{$chat->avatar->link}}); background-size: cover; background-position: center;">
+                                    </div>
+                                </div>
+                                <div class="border-t flex-1 flex flex-col justify-center pl-2">
+                                    <div class="flex">
+                                        <div class="flex-1">{{ $chat->name }}</div>
+                                        <div
+                                            class="text-[12px] text-slate-600">{{ optional($chat->lastMessage)->created_at->format("H:m") }}</div>
+                                    </div>
+                                    <div
+                                        class="w-[400px] text-slate-500 text-[14px] text-ellipsis whitespace-nowrap overflow-hidden">
+                                        @if (optional($chat->lastMessage)->user->is($currentUser))
+                                            <x-message-status :message="$chat->lastMessage"></x-message-status>
+                                        @endif
+                                        {{ optional($chat->lastMessage)->text }}
+                                    </div>
+                                </div>
+                            </li>
+                        @empty
+
+                        @endforelse
                     </ul>
                 </div>
             </div>

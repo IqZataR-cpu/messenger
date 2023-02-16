@@ -16,11 +16,7 @@
                 {{ $description }}
             </div>
         </div>
-        <div
-            class="control-buttons text-gray-500 text-[18px] flex justify-end space-x-6 mr-6 items-center h-full">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-solid fa-ellipsis-vertical"></i>
-        </div>
+        @include('components.dropdown-points')
     </div>
     <div class="flex-1 chat-content h-20 overflow-y-auto px-24 py-4 flex flex-col justify-between relative"
          style="background: url({{ asset('images/messages_background.jpg') }}); background-size: contain;">

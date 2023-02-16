@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         $chats = collect();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $chats->push(Chat::factory()
                 ->hasAttached($users)
                 ->hasAvatar()
